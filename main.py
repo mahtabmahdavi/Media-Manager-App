@@ -28,13 +28,20 @@ def function_menu():
 
 def film_handler(function_request):
     if function_request == 1:
-        film_obj = Film.add(FILMS)
+        film_obj = Film.add()
         if film_obj not in FILMS:
             FILMS.append(film_obj)
     elif function_request == 2:
         Film.edit(FILMS)
     elif function_request == 3:
-        Film.remove(FILMS)        
+        result = Film.remove(FILMS)
+        for item in FILMS:
+            if item.name == result.name and item.director == result.director:
+                FILMS.remove(result)
+                print("\nYour Media has been removed successfully!")
+                break
+        else:
+            print(result)       
     elif function_request == 4:
         Film.search(FILMS)
     elif function_request == 5:
@@ -51,7 +58,7 @@ def film_handler(function_request):
                 item.download()
     elif function_request == 7:
         Film.show_table()
-        for item in result:
+        for item in FILMS:
             item.show_info()         
     elif function_request == 8:
         db_film.write_to_database(FILMS)
@@ -84,7 +91,7 @@ def series_handler(function_request):
                 item.download()
     elif function_request == 7:
         Series.show_table()
-        for item in result:
+        for item in SERIES:
             item.show_info()         
     elif function_request == 8:
         db_series.write_to_database(SERIES)
@@ -117,7 +124,7 @@ def documentary_handler(function_request):
                 item.download()
     elif function_request == 7:
         Documentary.show_table()
-        for item in result:
+        for item in DOCUMENTARIES:
             item.show_info()         
     elif function_request == 8:
         db_documentary.write_to_database(DOCUMENTARIES)
@@ -150,7 +157,7 @@ def clip_handler(function_request):
                 item.download()
     elif function_request == 7:
         Clip.show_table()
-        for item in result:
+        for item in CLIPS:
             item.show_info()         
     elif function_request == 8:
         db_clip.write_to_database(CLIPS)

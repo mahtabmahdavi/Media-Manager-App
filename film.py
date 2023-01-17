@@ -1,4 +1,5 @@
 from media import Media
+from actors import Actor
 
 
 class Film(Media):
@@ -14,5 +15,10 @@ class Film(Media):
         print(f"---------------" * 5)
         
     def show_info(self):
-        print(f"{self.name}\t| {self.director}\t| {self.genre}\t| {self.imdb_score}\t| {self.duration}".expandtabs(12))
+        print(f"{self.name} | {self.director} | {self.genre} | {self.imdb_score}\t| {self.duration}".expandtabs(12))
         self.show_actors()
+
+    def show_actors(self):
+        print("\nActors:")
+        for actor in self.casts:
+            print(actor)

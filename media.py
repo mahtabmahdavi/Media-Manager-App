@@ -3,33 +3,36 @@ from actors import Actor
 
 
 class Media:
-    def __init__(self, name, director, imdb_score, url, duration):
+    def __init__(self, name, director, imdb_score, url, duration, casts):
         # Properties
         self.name = name
         self.director = director
         self.imdb_score = imdb_score
         self.url = url
         self.duration = duration
-        self.casts = []
+        self.casts = casts
 
     #Methods
     @staticmethod
     def add():
-        media_obj = Media()
-        media_obj.name = input("\nName = ")
-        media_obj.director = input("Director = ")
-        media_obj.imdb_score = input("IMDB Score = ")
-        media_obj.url = input("URL = ")
-        media_obj.duration = input("Duration(min) = ")
+        temp_name = input("\nName = ").lower()
+        temp_director = input("Director = ").lower()
+        temp_imdb_score = input("IMDB Score = ")
+        temp_url = input("URL = ")
+        temp_duration = input("Duration(min) = ")
 
-        temp = input("Actors(Press # to complete the process) = ")
-        while temp != "#":
-            temp = temp.split(" ")
-            media_obj.casts.append(Actor(temp[0], temp[1]))
+        actors = []
+        temp_actor = input("Actors(Press # to complete the process):\n")
+        while temp_actor != "#":
+            temp_actor = temp_actor.split(" ")
+            actors.append(Actor(temp_actor[0], temp_actor[1]))
+            temp_actor = input()
+
+        media_obj = Media(temp_name, temp_director, temp_imdb_score, temp_url, temp_duration, actors)
         return media_obj
 
     def edit(media_list):
-        edit_name = input("Enter the name of Media you want to remove: ")
+        edit_name = input("Enter the name of Media you want to edit: ")
         for item in media_list:
             if item.name == edit_name:
                 print("\nWhich parts do you want to edit? ")
@@ -40,28 +43,28 @@ class Media:
                 edit_choice = int(input("--> "))
 
                 if edit_choice == 1:
-                    item.director = input("Director = ")
+                    item.director = input("Director = ").lower()
                     print("\nInformation updated successfully!")
                     Media.show_table()
-                    item.show_info
+                    item.show_info()
                     break
                 elif edit_choice == 2:
                     item.imdb_score = input("IMDB Score = ")
                     print("\nInformation updated successfully!")
                     Media.show_table()
-                    item.show_info
+                    item.show_info()
                     break
                 elif edit_choice == 3:
                     item.url = input("URL = ")
                     print("\nInformation updated successfully!")
                     Media.show_table()
-                    item.show_info
+                    item.show_info()
                     break
                 elif edit_choice == 4:
                     item.duration = input("Duration = ")
                     print("\nInformation updated successfully!")
                     Media.show_table()
-                    item.show_info
+                    item.show_info()
                     break
                 else:
                     print("\nThat's wrong! Try again.")
@@ -71,31 +74,29 @@ class Media:
 
     @staticmethod
     def remove(media_list):
-        remove_name = input("Enter the name of Media you want to remove: ")
+        remove_name = input("Enter the name of Media you want to remove: ").lower()
         for item in media_list:
             if item.name == remove_name:
                 Media.show_table()
                 item.show_info()
 
-                remove_choice = input("Are you sure? y/n ").lower()
+                remove_choice = input("\nAre you sure? y/n ").lower()
                 if remove_choice == "y":
-                    media_list.remove(item)
-                    print("\nYour Media has been removed successfully!")
-                    break
+                    
+                    return item
                 elif remove_choice == "n":
-                    break
+                    return "\nOkay"
                 else:
-                    print("\nYour request has not been defined!")
-                    break
+                    return "\nYour request has not been defined!"
         else:
-            print("\nThe Media was NOT found to remove.")
+            return"\nThe Media was NOT found to remove."
 
     @staticmethod
     def search(media_list):
         search_name = input("\nEnter the name of Media you want: ")
         for item in media_list:
             if item.name == search_name:
-                print("\nThe Media was found.")
+                print("\nThe Media was found.\n")
                 Media.show_table()
                 item.show_info()
                 break 
