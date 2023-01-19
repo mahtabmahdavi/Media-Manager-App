@@ -16,17 +16,20 @@ class DataBase:
         with open("./Database/" + self.path, "r") as file:
             for line in file:
                 temp_file = line[:-1].split(",")
-                temp_actor = []
+                actors = []
+
                 if self.type == "Film":
-                    for i in range(6, len(temp_file)):
-                        temp_actor.append(temp_file[i])
-                    film_obj = Film(temp_file[0], temp_file[1], temp_file[2], temp_file[3], temp_file[4], temp_file[5],temp_actor)
+                    for i in range(5, len(temp_file) - 1):
+                        temp_actor = temp_file[i].split(" ")
+                        actors.append(Actor(temp_actor[0], temp_actor[1]))
+                    film_obj = Film(temp_file[0], temp_file[1], temp_file[2], temp_file[3], temp_file[4], actors, temp_file[len(temp_file) - 1])
                     media_list.append(film_obj)
 
                 elif self.type == "Series":
-                    for i in range(8, len(temp_file)):
-                        temp_actor.append(temp_file[i])
-                    series_obj = Series(temp_file[0], temp_file[1], temp_file[2], temp_file[3], temp_file[4], temp_file[5], temp_file[6], temp_file[7],temp_actor)
+                    for i in range(5, len(temp_file) - 3):
+                        temp_actor = temp_file[i].split(" ")
+                        actors.append(Actor(temp_actor[0], temp_actor[1]))
+                    series_obj = Series(temp_file[0], temp_file[1], temp_file[2], temp_file[3], temp_file[4], actors, temp_file[len(temp_file) - 3], temp_file[len(temp_file) - 2], temp_file[len(temp_file) - 1])
                     media_list.append(series_obj)
                 
                 elif self.type == "Documentary":
@@ -34,38 +37,33 @@ class DataBase:
                     media_list.append(documentary_obj)
 
                 elif self.type == "Clip":
-                    for i in range(6, len(temp_file)):
-                        temp_actor.append(temp_file[i])
-                    clip_obj = Clip(temp_file[0], temp_file[1], temp_file[2], temp_file[3], temp_file[4], temp_file[5],temp_actor)
+                    for i in range(5, len(temp_file) - 1):
+                        temp_actor = temp_file[i].split(" ")
+                        actors.append(Actor(temp_actor[0], temp_actor[1]))
+                    clip_obj = Clip(temp_file[0], temp_file[1], temp_file[2], temp_file[3], temp_file[4], actors, temp_file[len(temp_file) - 1])
                     media_list.append(clip_obj)
     
     def write_to_database(self, media_list):
         file = open("./Database/" + self.path, "w")
         for item in media_list:
             if self.type == "Film":
-                file.write(f"{item[0]},{item[1]},{item[2]},{item[3]},{item[4]},{item[5]},")
-                for i in range(len(item[6])):
-                    if i == len(item[6] - 1):
-                        file.write(f"{item[6][i]}\n")
-                    else:
-                        file.write(f"{item[6][i]},")
+                file.write(f"{item.name},{item.director},{item.imdb_score},{item.url},{item.duration},")
+                for i in range(len(item.casts)):
+                    file.write(f"{item.casts[i].first_name} {item.casts[i].last_name},")
+                file.write(f"{item.genre}\n")
 
             elif self.type == "Series":
-                file.write(f"{item[0]},{item[1]},{item[2]},{item[3]},{item[4]},{item[5]},{item[6]},{item[7]},")
-                for i in range(len(item[7])):
-                    if i == len(item[7] - 1):
-                        file.write(f"{item[7][i]}\n")
-                    else:
-                        file.write(f"{item[7][i]},")
+                file.write(f"{item.name},{item.director},{item.imdb_score},{item.url},{item.duration},")
+                for i in range(len(item.casts)):
+                    file.write(f"{item.casts[i].first_name} {item.casts[i].last_name},")
+                file.write(f"{item.genre},{item.season},{item.episode}\n")
 
             elif self.type == "Documentary":
-                file.write(f"{item[0]},{item[1]},{item[2]},{item[3]},{item[4]},{item[5]}\n")
+                file.write(f"{item.name},{item.director},{item.imdb_score},{item.url},{item.duration},{item.topic}\n")
 
             elif self.type == "Clip":
-                file.write(f"{item[0]},{item[1]},{item[2]},{item[3]},{item[4]},{item[5]},")
-                for i in range(len(item[6])):
-                    if i == len(item[6] - 1):
-                        file.write(f"{item[6][i]}\n")
-                    else:
-                        file.write(f"{item[6][i]},")  
+                file.write(f"{item.name},{item.director},{item.imdb_score},{item.url},{item.duration},")
+                for i in range(len(item.casts)):
+                    file.write(f"{item.casts[i].first_name} {item.casts[i].last_name},")
+                file.write(f"{item.genre}\n")
         file.close()
